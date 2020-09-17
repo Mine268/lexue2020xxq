@@ -62,7 +62,7 @@ int main(void)
 }
 int ncomp(const void *p1, const void *p2)
 {
-    int key1 = ((struct dragon*)p1)->hardness + ((struct dragon*)p1)->exp;
+    int key1 = ((struct dragon*)p1)->hardness + ((struct dragon*)p1)->exp; // x+y for the minimun attack after attack the dragon with negative exp. use greedy alg
     int key2 = ((struct dragon*)p2)->hardness + ((struct dragon*)p2)->exp;
     return -(key1 - key2);
 }
