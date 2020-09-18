@@ -20,10 +20,19 @@ void maxHeapPush(heap*, int); // 最大堆的增添操作
 int maxHeapPop(heap*); // 最大堆的弹出操作
 void minHeapPush(heap*, int); // 最小堆的增添操作
 int minHeapPop(heap*); // 最小堆的弹出操作
+void delHeap(heap*); // 释放堆
 
 int main(void)
 {
     return 0;
+}
+
+void delHeap(heap *h)
+{
+    free(h->data);
+    h->size = 0;
+    h->capicity = 0;
+    return;
 }
 
 void minHeapPush(heap *h, int val)
