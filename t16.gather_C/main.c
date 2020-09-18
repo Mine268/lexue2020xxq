@@ -3,7 +3,7 @@
 #include <string.h>
 #include <memory.h>
 
-#define LEN 500 // 500000
+#define LEN 500 // 500010
 #define RIGHT(x) (2*(x)+2)
 #define LEFT(x) (2*(x)+1)
 #define PARENT(x) (((x)+1)>>1-1)
