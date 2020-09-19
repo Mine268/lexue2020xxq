@@ -71,35 +71,39 @@ int main(void)
             // 调整x维度的曼哈顿距离
             if (leftX == rightX)
             {
+                // 左右堆规模相同，输入小于或等于中位数
                 if (nextX <= midX)
                 {
                     res += midX - nextX;
                     maxHeapPush(&lessX_maxH, nextX);
                 }
+                // 左右堆规模相同，输入大于中位数
                 else
                 {
-                    res += nextX - midX;
                     minHeapPush(&greatX_minH, nextX);
                     int tmp = minHeapPop(&greatX_minH);
                     maxHeapPush(&lessX_maxH, midX);
+                    res += nextX - midX;
                     midX = tmp;
                 }
                 leftX++;
             }
             else // 这是leftX = rightX + 1的情况
             {
+                // 左堆比右堆大一，输入大于或等于中位数
                 if (nextX >= midX)
                 {
                     res += nextX - midX;
                     minHeapPush(&greatX_minH, nextX);
                 }
+                // 左堆比右堆大一，输入小于中位数
                 else
                 {
-                    res += midX - nextX;
                     maxHeapPush(&lessX_maxH, nextX);
                     int tmp = maxHeapPop(&lessX_maxH);
                     minHeapPush(&greatX_minH, midX);
                     midX = tmp;
+                    res += midX - nextX;
                 }
                 rightX++;
             }
@@ -114,10 +118,10 @@ int main(void)
                 }
                 else
                 {
-                    res += nextY - midY;
                     minHeapPush(&greatY_minH, nextY);
                     int tmp = minHeapPop(&greatY_minH);
                     maxHeapPush(&lessY_maxH, midY);
+                    res += nextY - midY;
                     midY = tmp;
                 }
                 leftY++;
@@ -131,11 +135,11 @@ int main(void)
                 }
                 else
                 {
-                    res += midY - nextY;
                     maxHeapPush(&lessY_maxH, nextY);
                     int tmp = maxHeapPop(&lessY_maxH);
                     minHeapPush(&greatY_minH, midY);
                     midY = tmp;
+                    res += midY - nextY;
                 }
                 rightY++;
             }
