@@ -4,16 +4,16 @@
 #include <memory.h>
 #include <limits.h>
 
-#define LEN          500 // 500010
+#define LEN          500 // 250000
 #define RIGHT(x)     (2*(x)+2)
 #define LEFT(x)      (2*(x)+1)
 #define PARENT(x)    ((((x)+1)>>1)-1)
-#define MAX          1000000001
-#define MIN          -1000000001
+#define MAX          0x7F7F7F7F // 2,139,062,143
+#define MIN          0x80808080 // -2,139,062,144
 
 typedef struct HEAP
 {
-    int *data; // 这个堆的数据
+    int data[LEN]; // 这个堆的数据
     int size;  // 这个对当下的大小
     int capicity; // 这个堆的最大容量
 } heap;
@@ -48,6 +48,21 @@ heap greatY_minH;
 
 int main(void)
 {
+    // int arr[10] = {6,4,2,7,8,9,1,0,5,12};
+    // heap mH; iniHeap(&mH, 10, -1);
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     minHeapPush(&mH, arr[i]);
+    //     printHeap(&mH);
+    // }
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     printf("[%d] ", minHeapPop(&mH));
+    //     printHeap(&mH);
+    // }
+    // getchar();
+    // return 0;
+
     int T; scanf("%d", &T); getchar();
     for (int i = 0; i < T; i++)
     {
@@ -147,8 +162,8 @@ int main(void)
         }
 
         // 每次使用完成之后需要清空堆
-        delHeap(&lessX_maxH); delHeap(&lessY_maxH);
-        delHeap(&greatX_minH); delHeap(&greatY_minH);
+        // delHeap(&lessX_maxH); delHeap(&lessY_maxH);
+        // delHeap(&greatX_minH); delHeap(&greatY_minH);
     }
 
     getchar();
@@ -157,7 +172,7 @@ int main(void)
 
 void printHeap(heap *h)
 {
-    for (int i = 0; i < 10; i++) printf("%d ", h->data[i]);
+    for (int i = 0; i < h->size + 1; i++) printf("%d ", h->data[i]);
     putchar('\n');
     return;
 }
@@ -174,8 +189,7 @@ void minHeapPush(heap *h, int val)
 {
     if (h->size == h->capicity) return;
 
-    int ind;
-    for (ind = h->size; h->data[ind] != MAX; ind--);
+    int ind = h->size;
     h->data[ind] = val;
     while (ind != 0 && h->data[ind] < h->data[PARENT(ind)])
     {
@@ -194,18 +208,19 @@ int minHeapPop(heap* h)
     return MAX;
     else
     {
-        int res = h->data[0];
-        int ind = 0;
-        while (h->data[LEFT(ind)] != MAX || h->data[RIGHT(ind)] != MAX)
-        {
-            int choice;
-            if (h->data[LEFT(ind)] <= h->data[RIGHT(ind)]) choice = LEFT(ind);
-            else choice = RIGHT(ind);
-            h->data[ind] = h->data[choice];
-            ind = choice;
-        }
-        h->data[ind] = MAX;
+        int res = h->data[0], ind = 0;
         h->size--;
+        h->data[0] = h->data[h->size];
+        h->data[h->size] = MAX;
+        while (h->data[ind] > h->data[LEFT(ind)] || h->data[ind] > h->data[RIGHT(ind)])
+        {
+            int choice, tmp;
+            if (h->data[LEFT(ind)] > h->data[RIGHT(ind)]) choice = RIGHT(ind);
+            else choice = LEFT(ind);
+            tmp = h->data[ind];
+            h->data[ind] = h->data[choice];
+            h->data[choice] = tmp;
+        }
         return res;
     }
 }
@@ -214,8 +229,7 @@ void maxHeapPush(heap *h, int val)
 {
     if (h->size == h->capicity) return;
 
-    int ind;
-    for (ind = h->size; h->data[ind] != MIN; ind--);
+    int ind = h->size;
     h->data[ind] = val;
     while (ind != 0 && h->data[ind] > h->data[PARENT(ind)])
     {
@@ -234,27 +248,27 @@ int maxHeapPop(heap* h)
     return MIN;
     else
     {
-        int res = h->data[0];
-        int ind = 0;
-        while (h->data[LEFT(ind)] != MIN || h->data[RIGHT(ind)] != MIN)
-        {
-            int choice;
-            if (h->data[LEFT(ind)] >= h->data[RIGHT(ind)]) choice = LEFT(ind);
-            else choice = RIGHT(ind);
-            h->data[ind] = h->data[choice];
-            ind = choice;
-        }
-        h->data[ind] = MIN;
+        int res = h->data[0], ind = 0;
         h->size--;
+        h->data[0] = h->data[h->size];
+        h->data[h->size] = MIN;
+        while (h->data[ind] < h->data[LEFT(ind)] || h->data[ind] < h->data[RIGHT(ind)])
+        {
+            int choice, tmp;
+            if (h->data[LEFT(ind)] < h->data[RIGHT(ind)]) choice = RIGHT(ind);
+            else choice = LEFT(ind);
+            tmp = h->data[ind];
+            h->data[ind] = h->data[choice];
+            h->data[choice] = tmp;
+        }
         return res;
     }
 }
 
 void iniHeap(heap * h, int num, int sel)
 {
-    h->data = (int *)malloc(sizeof(int) * num);
-    for (int i = 0; i < num; i++) h->data[i] = sel == -1 ? MAX : MIN;
     h->size = 0;
     h->capicity = num;
+    memset(h->data, sel == 1 ? 0x80 : 0x7F, sizeof(h->data));
     return;
 }
