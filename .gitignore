@@ -1,2 +1,6 @@
 *.exe
 *.json
+*.aux
+*.pdf
+*.gz
+*.log
