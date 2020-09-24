@@ -28,22 +28,21 @@ POS makepair(int i, int j);
 int main(void)
 {
     int T;
-    scanf("%d", &T);
-    getchar();
+    cin >> T;
     while (T-- > 0)
     {
         /* mat无需进行初始化 */
         memset(vis, 0, sizeof(int) * M * N * K);
         int n, m, k, si, sj, ei, ej; // n为行，m为列
         long long step = 0, ans;
-        scanf("%d%d%d", &n, &m, &k);
+        cin >> n >> m >> k;
         getchar();
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
                 char tmp;
-                scanf("%c", &tmp);
+                cin >> tmp;
                 switch (tmp)
                 {
                 case '.':
@@ -69,7 +68,7 @@ int main(void)
                 case '*':
                     for (int n = 0; n < k; n++)
                         mat[i][j][n] = '*';
-                    mat[i][j][k - 1] = '.';
+                    mat[i][j][0] = '.';
                     break;
                 }
             }
@@ -90,7 +89,7 @@ int main(void)
                 POS tmp = bfsline.front();
                 bfsline.pop();
                 // 左
-                if (valid(tmp.i, tmp.j - 1, m, n) && mat[tmp.i][tmp.j - 1][step % k] == '.' && vis[tmp.i][tmp.j - 1][step % k] == 0)
+                if (valid(tmp.i, tmp.j - 1, n, m) && (mat[tmp.i][tmp.j - 1][step % k] == '.' || (mat[tmp.i][tmp.j - 1][step % k] == '*' && step % k == 0)) && vis[tmp.i][tmp.j - 1][step % k] == 0)
                 {
                     vis[tmp.i][tmp.j - 1][step % k] = 1;
                     bfsline.push(makepair(tmp.i, tmp.j - 1));
@@ -102,7 +101,7 @@ int main(void)
                     }
                 }
                 // 右
-                if (valid(tmp.i, tmp.j + 1, m, n) && mat[tmp.i][tmp.j + 1][step % k] == '.' && vis[tmp.i][tmp.j + 1][step % k] == 0)
+                if (valid(tmp.i, tmp.j + 1, n, m) && (mat[tmp.i][tmp.j + 1][step % k] == '.' || (mat[tmp.i][tmp.j + 1][step % k] == '*' && step % k == 0)) && vis[tmp.i][tmp.j + 1][step % k] == 0)
                 {
                     vis[tmp.i][tmp.j + 1][step % k] = 1;
                     bfsline.push(makepair(tmp.i, tmp.j + 1));
@@ -114,7 +113,7 @@ int main(void)
                     }
                 }
                 // 上
-                if (valid(tmp.i - 1, tmp.j, m, n) && mat[tmp.i - 1][tmp.j][step % k] == '.' && vis[tmp.i - 1][tmp.j][step % k] == 0)
+                if (valid(tmp.i - 1, tmp.j, n, m) && (mat[tmp.i - 1][tmp.j][step % k] == '.' || (mat[tmp.i - 1][tmp.j][step % k] == '*' && step % k == 0)) && vis[tmp.i - 1][tmp.j][step % k] == 0)
                 {
                     vis[tmp.i - 1][tmp.j][step % k] = 1;
                     bfsline.push(makepair(tmp.i - 1, tmp.j));
@@ -126,7 +125,7 @@ int main(void)
                     }
                 }
                 // 下
-                if (valid(tmp.i + 1, tmp.j, m, n) && mat[tmp.i + 1][tmp.j][step % k] == '.' && vis[tmp.i + 1][tmp.j][step % k] == 0)
+                if (valid(tmp.i + 1, tmp.j, n, m) && (mat[tmp.i + 1][tmp.j][step % k] == '.' || (mat[tmp.i + 1][tmp.j][step % k] == '*' && step % k == 0)) && vis[tmp.i + 1][tmp.j][step % k] == 0)
                 {
                     vis[tmp.i + 1][tmp.j][step % k] = 1;
                     bfsline.push(makepair(tmp.i + 1, tmp.j));
@@ -141,7 +140,7 @@ int main(void)
             tmp_count = add_count;
         }
         if (flag == 1) cout << ans << endl;
-        else cout << -1 << endl;
+        else if (flag == 0) cout << "-1" << endl;
     }
 
     return 0;
@@ -172,9 +171,9 @@ POS *constructPos(int i, int j)
     return tmp;
 }
 
-bool valid(int i, int j, int m, int n)
+bool valid(int i, int j, int n, int m)
 {
-    if (i >= 0 && i < m && j >= 0 && j < m)
+    if (i >= 0 && i < n && j >= 0 && j < m)
         return true;
     else
         return false;
