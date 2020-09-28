@@ -27,7 +27,7 @@ int main(void)
 
     long long ans = LLONG_MIN;
     for (int i = 3; i <= n; i++)
-        ans = max(ans, dp[3][i]);
+        ans = MAX(ans, dp[3][i]);
     
     cout << ans << endl;
 
